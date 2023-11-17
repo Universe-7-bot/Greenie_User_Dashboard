@@ -21,6 +21,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const style = {
     position: 'absolute',
@@ -60,7 +61,10 @@ const Home = () => {
       });
 
       if (res.status == 400) {
-        setError("Missing required fields");
+        setError("Missing required fields")
+        setTimeout(() => {
+          setError("");
+        }, 1500);
         return;
       }
 
@@ -72,7 +76,13 @@ const Home = () => {
         setEmail("");
         setPassword("");
         setPhone("");
-        router.push('/');
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+          setUserDetails(true);
+          setCreateAccount(false);
+        }, 2000);
+        // router.push('/');
       } else {
         console.error('Failed to create account');
       }
@@ -140,6 +150,11 @@ const Home = () => {
                   {
                     error !== "" ? <div className='lg:w-full flex items-center justify-center'>
                       <Alert className='lg:w-1/2 w-full' severity="error">{ error }</Alert>
+                    </div> : ""
+                  }
+                  {
+                    success ? <div className='lg:w-full flex items-center justify-center'>
+                      <Alert className='lg:w-1/2 w-full' severity="success">Account created successfully</Alert>
                     </div> : ""
                   }
                   {/* </form> */}
